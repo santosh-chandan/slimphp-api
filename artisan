@@ -1,0 +1,44 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+use Illuminate\Console\Application;
+use Illuminate\Database\Migrations\DatabaseMigrationRepository;
+use Illuminate\Database\Migrations\Migrator;
+use Illuminate\Database\Migrations\MigrateCommand;
+use Illuminate\Database\Migrations\RollbackCommand;
+use Illuminate\Database\Migrations\StatusCommand;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+// Load Eloquent connection
+$capsule = require __DIR__ . '/config/connection.php';
+
+// Setup event dispatcher
+$container = new Container;
+$capsule->setEventDispatcher(new Dispatcher($container));
+
+// Prepare migration repository
+$repository = new DatabaseMigrationRepository($capsule->getDatabaseManager(), 'migrations');
+if (!$repository->repositoryExists()) {
+    $repository->createRepository();
+}
+
+// Setup migrator
+$migrator = new Migrator($repository, $capsule->getDatabaseManager(), $container);
+$migrator->setOutput(new ConsoleOutput());
+
+// 💡 Register the custom migration path
+//$migrator->path(__DIR__ . '/database/migrations');
+
+// Setup Artisan-style CLI app
+$app = new Application('Slim Artisan', '1.0');
+$app->add(new MigrateCommand($migrator));
+$app->add(new RollbackCommand($migrator));
+$app->add(new StatusCommand($migrator));
+
+// Run it
+$app->run(new ArgvInput());

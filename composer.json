@@ -1,0 +1,31 @@
+{
+    "name": "santoshchandan/tasks-api",
+    "description": "A simple Slim 4 API for managing tasks",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "require": {
+        "slim/psr7": "^1.7",
+        "slim/slim": "^4.0",
+        "vlucas/phpdotenv": "^5.6",
+        "illuminate/database": "^12.9",
+        "illuminate/events": "^12.9",
+        "illuminate/console": "^12.9",
+        "nyholm/psr7": "^1.8",
+        "phpunit/phpunit": "^11.5",
+        "mockery/mockery": "^1.6",
+        "php-di/php-di": "^7.0",
+        "zircote/swagger-php": "^5.0",
+        "monolog/monolog": "^3.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Santoshchandan\\TasksApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "santosh-chandan",
+            "email": "santoshchandan.it@gmail.com"
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+# Composer
+/vendor/
+composer.lock
+
+# PHPStorm
+.idea/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Cache / Temp
+/tmp/
+.cache/
+.cache-loader/
+.phpunit.result.cache
+
+# Docker
+docker-compose.override.yml
+
+# Coverage reports
+coverage/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Built assets (optional, if you're compiling assets)
+public/build/
+public/js/
+public/css/
