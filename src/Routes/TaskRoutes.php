@@ -23,9 +23,7 @@ return function (App $app) {
         return $response;
     });
 
-    /**
-     * Swagger-OpenAPI
-     */
+    // Swagger-OpenAPI
     $app->get('/docs/openapi.json', function ($request, $response) {
         $openapi = \OpenApi\Generator::scan([
             realpath(__DIR__ . '/../Controllers'),
@@ -36,15 +34,11 @@ return function (App $app) {
         return $response->withHeader('Content-Type', 'application/json');
     });    
 
-    /**
-     * None Auth Routes
-     */
+    // None Auth Routes
     $app->get('/tasks', [$taskController, 'index']);
     $app->get('/tasks/{id}', [$taskController, 'show']);
 
-    /**
-     * Auth Routes
-     */
+    // Auth Routes
     $app->post('/tasks', [$taskController, 'store'])->add($auth);
     $app->put('/tasks/{id}', [$taskController, 'update'])->add($auth);
     $app->delete('/tasks/{id}', [$taskController, 'destroy'])->add($auth);

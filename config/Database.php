@@ -21,8 +21,8 @@ $capsule = new Capsule();
 
 try {
     $capsule->addConnection([
-        'driver'    => 'pgsql', // or 'mysql'
-        'host'      => $host,   // use '127.0.0.1' if no Docker
+        'driver'    => 'pgsql',
+        'host'      => $host,  // use '127.0.0.1' if no Docker
         'database'  => $db,
         'username'  => $user,
         'password'  => $pass,

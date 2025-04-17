@@ -16,7 +16,6 @@ class AuthMiddleware implements MiddlewareInterface
 {
     public function process(Request $request, Handler $handler): Response
     {
-        // Dummy auth: expects a header `Authorization: Bearer $_ENV['API_KEY']`
         $secret = $_ENV['API_KEY'];
         $authHeader = $request->getHeaderLine('Authorization');
 
@@ -25,8 +24,7 @@ class AuthMiddleware implements MiddlewareInterface
             $response->getBody()->write(json_encode(['error' => 'Unauthorized']));
             return $response->withStatus(401)->withHeader('Content-Type', 'application/json');
         }
-
-        // Auth success → continue to controller
+        // Auth success continue to controller
         return $handler->handle($request);
     }
 }

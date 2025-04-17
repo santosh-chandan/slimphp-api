@@ -20,14 +20,6 @@ composer.lock
 # Docker
 docker-compose.override.yml
 
-# Coverage reports
-coverage/
-
 # OS-specific
 .DS_Store
 Thumbs.db
-
-# Built assets (optional, if you're compiling assets)
-public/build/
-public/js/
-public/css/

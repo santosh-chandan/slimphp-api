@@ -22,9 +22,21 @@ use Exception;
 
 class TaskController
 {
+    /**
+     * TaskService $taskService
+     */
     protected $taskService;
+
+    /**
+     * Logger $logger
+     */
     protected $logger;
 
+    /**
+     * construct method
+     * @param $taskService
+     * @param $logger
+     */
     public function __construct(
         TaskService $taskService,
         Logger $logger
@@ -53,7 +65,6 @@ class TaskController
             $tasks = $this->taskService->getTasks($page, $limit);
 
             $this->logger->info('Fetched ' . count($tasks) . ' tasks');
-            // Convert the tasks array to JSON
             $response->getBody()->write(json_encode($tasks));
             return $response->withHeader('Content-Type', 'application/json');
         } catch (Exception $e) {
@@ -93,15 +104,12 @@ class TaskController
             $task = $this->taskService->getTaskById($args['id']);
 
             if (!$task) {
-                // Use Stream::create instead of fromString
                 $stream = Stream::create(json_encode(['error' => 'Task not found']));
                 return $response
                     ->withStatus(404)
                     ->withHeader('Content-Type', 'application/json')
                     ->withBody($stream);
             }
-
-            // Fix here: Use $task instead of $tasks
             $response->getBody()->write(json_encode($task));
             return $response->withHeader('Content-Type', 'application/json');
         } catch (Exception $e) {
@@ -115,36 +123,42 @@ class TaskController
         }
     }
 
+    /**
+     * save task end point process
+     * @param $request
+     * @param $response
+     * @return Response
+     */
     public function store(Request $request, Response $response): Response
     {
         try {
             $data = $request->getParsedBody();
 
             if (!isset($data['title']) || strlen($data['title']) < 3) {
-                $error = json_encode([
-                    'error' => 'Title is required and must be at least 3 characters.'
-                ]);
+                $error = json_encode(['error' => 'Title is required and must be at least 3 characters.']);
                 $stream = Stream::create($error);
-                return $response
-                    ->withStatus(400)
-                    ->withHeader('Content-Type', 'application/json')
-                    ->withBody($stream);
+                return $response->withStatus(400)->withHeader('Content-Type', 'application/json')->withBody($stream);
             }
-
             $task = $this->taskService->createTask($data);
             $response->getBody()->write(json_encode($task));
+
             return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
+
         } catch (Exception $e) {
             $this->logger->error('Error creating task: ' . $e->getMessage());
             $error = json_encode(['error' => 'Failed to create task']);
             $stream = Stream::create($error);
-            return $response
-                ->withStatus(500)
-                ->withHeader('Content-Type', 'application/json')
-                ->withBody($stream);
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json')->withBody($stream);
         }
     }
 
+    /**
+     * update end point process
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return Response
+     */
     public function update(Request $request, Response $response, $args): Response
     {
         try {
@@ -158,7 +172,6 @@ class TaskController
             }
 
             $data = $request->getParsedBody();
-            // Pass the $task object, not the $data array
             $this->taskService->updateTask($task, $data);
             return $response->withStatus(204);
         } catch (Exception $e) {
@@ -172,6 +185,13 @@ class TaskController
         }
     }
 
+    /**
+     * delete end point process
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return Response
+     */
     public function destroy(Request $request, Response $response, $args): Response
     {
         try {

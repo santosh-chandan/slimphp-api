@@ -45,7 +45,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn($tasks);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', '/tasks');
         $response = $factory->createResponse();
@@ -74,7 +73,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn($task);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', '/tasks/1');
         $response = $factory->createResponse();
@@ -82,7 +80,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->show($request, $response, ['id' => 1]);
 
-        // Assert
         $this->assertEquals(200, $result->getStatusCode());
         $body = (string) $result->getBody();
         $this->assertStringContainsString('Test Task 1', $body);
@@ -100,7 +97,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn(null);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', '/tasks/99');
         $response = $factory->createResponse();
@@ -108,7 +104,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->show($request, $response, ['id' => 99]);
 
-        // Assert
         $this->assertEquals(404, $result->getStatusCode());
         $body = (string) $result->getBody();
         $this->assertStringContainsString('Task not found', $body);
@@ -129,7 +124,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn($task);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('POST', '/tasks')
             ->withParsedBody($data);
@@ -138,7 +132,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->store($request, $response);
 
-        // Assert
         $this->assertEquals(201, $result->getStatusCode());
         $body = (string) $result->getBody();
         $this->assertStringContainsString('Test Task 1', $body);
@@ -149,8 +142,7 @@ class TaskControllerTest extends TestCase
      */
     public function testStoreReturnsBadRequestIfNoTitle()
     {
-        $data = [];  // No title provided
-
+        $data = [];
         // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('POST', '/tasks')
@@ -160,7 +152,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->store($request, $response);
 
-        // Assert
         $this->assertEquals(400, $result->getStatusCode());
         $body = (string) $result->getBody();
         $this->assertStringContainsString('Title is required', $body);
@@ -171,7 +162,6 @@ class TaskControllerTest extends TestCase
      */
     public function testUpdateTask()
     {
-        // Create a real Task object instead of just an array
         $task = new Task();
         $task->id = 1;
         $task->title = 'Test Task 1';
@@ -191,7 +181,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('PUT', '/tasks/1')
             ->withParsedBody($updatedData);
@@ -200,7 +189,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->update($request, $response, ['id' => 1]);
 
-        // Assert
         $this->assertEquals(204, $result->getStatusCode());
     }
 
@@ -210,7 +198,6 @@ class TaskControllerTest extends TestCase
      */
     public function testDestroyDeletesTask()
     {
-        // Create a real Task object instead of just an array
         $task = new Task();
         $task->id = 1;
         $task->title = 'Test Task 1';
@@ -228,7 +215,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('DELETE', '/tasks/1');
         $response = $factory->createResponse();
@@ -236,7 +222,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->destroy($request, $response, ['id' => 1]);
 
-        // Assert
         $this->assertEquals(204, $result->getStatusCode());
     }
 
@@ -252,7 +237,6 @@ class TaskControllerTest extends TestCase
             ->once()
             ->andReturn(null);
 
-        // Create PSR-7 request and response
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('DELETE', '/tasks/99');
         $response = $factory->createResponse();
@@ -260,7 +244,6 @@ class TaskControllerTest extends TestCase
         // Call the controller method
         $result = $this->controller->destroy($request, $response, ['id' => 99]);
 
-        // Assert
         $this->assertEquals(404, $result->getStatusCode());
         $body = (string) $result->getBody();
         $this->assertStringContainsString('Task not found', $body);
